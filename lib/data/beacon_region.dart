@@ -44,7 +44,7 @@ class BeaconRegionIBeacon extends BeaconRegion {
 
   String get proximityUUID => ids[0];
 
-  int get major => ids.length > 1 ? ids[1] : null;
+  String get major => ids.length > 1 ? ids[1] : null;
 
-  int get minor => ids.length > 2 ? ids[2] : null;
+  String get minor => ids.length > 2 ? ids[2] : null;
 }
