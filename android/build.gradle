@@ -51,7 +51,7 @@ dependencies {
 
     implementation "com.android.support:support-compat:27.1.1"
     implementation "com.android.support:support-core-utils:27.1.1"
-    implementation "org.altbeacon:android-beacon-library:2.14"
+    implementation "org.altbeacon:android-beacon-library:2.15.2"
     implementation "com.squareup.moshi:moshi:1.5.0"
 
     provided rootProject.findProject(":streams_channel")
