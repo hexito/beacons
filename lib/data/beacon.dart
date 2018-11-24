@@ -28,8 +28,8 @@ class BeaconIBeacon {
             _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']);
 
   final String proximityUUID;
-  final int major;
-  final int minor;
+  final String major;
+  final String minor;
   final double accuracy;
   final int rssi;
   final BeaconProximity proximity;
