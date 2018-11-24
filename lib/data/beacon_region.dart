@@ -19,8 +19,8 @@ class BeaconRegionIBeacon extends BeaconRegion {
   BeaconRegionIBeacon({
     @required String identifier,
     @required String proximityUUID,
-    int major,
-    int minor,
+    String major,
+    String minor,
   }) : super(
           identifier: identifier,
           ids: [],
