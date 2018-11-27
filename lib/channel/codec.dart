@@ -115,6 +115,7 @@ class _JsonCodec {
 
   static Beacon beaconFromJson(Map<String, dynamic> json) => new Beacon._(
       json['ids'],
+      json['extraDataFields'],
       _Codec.parseJsonNumber(json['distance']),
       json['rssi'],
       json['platformCustoms']);
