@@ -69,7 +69,7 @@ class BeaconsPlugin(val registrar: Registrar) {
 
         @JvmStatic
         fun registerWith(registrar: Registrar): Unit {
-            val plugin = BeaconsPlugin(registrar)
+            BeaconsPlugin(registrar)
         }
     }
 

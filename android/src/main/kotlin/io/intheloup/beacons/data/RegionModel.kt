@@ -32,7 +32,7 @@ class RegionModel(
         fun parse(region: Region): RegionModel {
             val ids = ArrayList<String>()
             var i = 0
-            var id: Identifier? = null
+            var id: Identifier?
             do {
                 id = region.getIdentifier(i)
                 id?.let { ids.add(it.toString()) }
