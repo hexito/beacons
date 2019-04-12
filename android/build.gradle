@@ -18,6 +18,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -51,7 +54,8 @@ dependencies {
 
     implementation "com.android.support:support-compat:27.1.1"
     implementation "com.android.support:support-core-utils:27.1.1"
-    implementation "org.altbeacon:android-beacon-library:2.15.2"
+    implementation "org.altbeacon:android-beacon-library:2.16.2-beta1"
+    implementation 'lib/android-beacon-library-2.16.2-beta1@aar'
     implementation "com.squareup.moshi:moshi:1.5.0"
 
     compileOnly rootProject.findProject(":streams_channel")
