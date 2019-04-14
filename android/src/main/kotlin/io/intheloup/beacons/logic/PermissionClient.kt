@@ -6,8 +6,10 @@ package io.intheloup.beacons.logic
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.*
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.*
 import io.flutter.plugin.common.PluginRegistry
 import io.intheloup.beacons.BeaconsPlugin
 import io.intheloup.beacons.data.Permission
@@ -68,7 +70,7 @@ class PermissionClient {
                         failure = { _ -> cont.resume(PermissionResult.Denied) }
                 )
                 permissionCallbacks.add(callback)
-                ActivityCompat.requestPermissions(activity!!, arrayOf(permission.manifestValue), BeaconsPlugin.Intents.PermissionRequestId)
+                requestPermissions(activity!!, arrayOf(permission.manifestValue), BeaconsPlugin.Intents.PermissionRequestId)
             }
         }
 
