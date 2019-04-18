@@ -20,8 +20,8 @@ class Beacon {
 class BeaconIBeacon {
   BeaconIBeacon.from(Beacon beacon)
       : proximityUUID = beacon.ids[0],
-        major = beacon.ids.length > 1 ? beacon.ids[1] : null,
-        minor = beacon.ids.length > 2 ? beacon.ids[2] : null,
+        major = beacon.ids.length > 1 ? int.tryParse(beacon.ids[1]) : null,
+        minor = beacon.ids.length > 2 ? int.tryParse(beacon.ids[2]) : null,
         accuracy = beacon.distance,
         rssi = beacon.rssi,
         proximity =
