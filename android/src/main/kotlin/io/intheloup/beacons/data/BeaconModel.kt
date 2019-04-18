@@ -6,16 +6,13 @@ package io.intheloup.beacons.data
 import org.altbeacon.beacon.Beacon
 
 class BeaconModel(
-        val ids: List<Any>,
+        val ids: List<String>,
         val distance: Double,
         val rssi: Int
 ) {
     companion object {
-        private fun String.orInt(): Any { return toIntOrNull() ?: this }
-
-
         fun parse(beacon: Beacon) = BeaconModel(
-                beacon.identifiers?.map { it.toString().orInt() } ?: emptyList(),
+                beacon.identifiers?.map { it.toString() } ?: emptyList(),
                 beacon.distance,
                 beacon.rssi
         )
