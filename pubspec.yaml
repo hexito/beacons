@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  streams_channel: ^0.2.1
+  streams_channel: ^0.2.2
 
 flutter:
   plugin:
