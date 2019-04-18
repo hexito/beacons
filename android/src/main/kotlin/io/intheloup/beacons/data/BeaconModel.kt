@@ -11,11 +11,11 @@ class BeaconModel(
         val rssi: Int
 ) {
     companion object {
-        private fun intOrString(str: String) = str.toIntOrNull() ?: str
+        private fun String.orInt(): Any { return toIntOrNull() ?: this }
 
 
         fun parse(beacon: Beacon) = BeaconModel(
-                beacon.identifiers?.map { intOrString(it.toString()) } ?: emptyList(),
+                beacon.identifiers?.map { it.toString().orInt() } ?: emptyList(),
                 beacon.distance,
                 beacon.rssi
         )
