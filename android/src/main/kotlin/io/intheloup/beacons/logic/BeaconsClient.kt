@@ -13,8 +13,10 @@ import android.util.Log
 import io.intheloup.beacons.BeaconsPlugin
 import io.intheloup.beacons.channel.DataRequest
 import io.intheloup.beacons.data.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.android.Main
+import kotlinx.coroutines.launch
 import org.altbeacon.beacon.*
 import org.altbeacon.beacon.logging.LogManager
 import org.altbeacon.beacon.logging.Loggers
@@ -107,7 +109,7 @@ class BeaconsClient(private val permissionClient: PermissionClient) : BeaconCons
 
         requests.add(request)
 
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             val result = permissionClient.request(permission)
             if (result !== PermissionClient.PermissionResult.Granted) {
                 request.callback!!(result.result)
@@ -242,11 +244,11 @@ class BeaconsClient(private val permissionClient: PermissionClient) : BeaconCons
         return activity!!.applicationContext
     }
 
-    override fun unbindService(p0: ServiceConnection?) {
+    override fun unbindService(p0: ServiceConnection) {
         return activity!!.unbindService(p0)
     }
 
-    override fun bindService(p0: Intent?, p1: ServiceConnection?, p2: Int): Boolean {
+    override fun bindService(p0: Intent?, p1: ServiceConnection, p2: Int): Boolean {
         return activity!!.bindService(p0, p1, p2)
     }
 

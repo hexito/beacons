@@ -6,14 +6,12 @@ part of beacons;
 class Beacon {
   Beacon._(
     this.ids,
-    this.extraDataFields,
     this.distance,
     this.rssi,
     this._platformCustoms,
   );
 
   final List<dynamic> ids;
-  final List<dynamic> extraDataFields;
   final double distance;
   final int rssi;
   final Map<String, dynamic> _platformCustoms;
@@ -30,8 +28,8 @@ class BeaconIBeacon {
             _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']);
 
   final String proximityUUID;
-  final String major;
-  final String minor;
+  final int major;
+  final int minor;
   final double accuracy;
   final int rssi;
   final BeaconProximity proximity;
