@@ -15,8 +15,8 @@ struct Beacon : Codable {
   init(from beacon: CLBeacon) {
     self.ids = [
       AnyCodable(beacon.proximityUUID.uuidString),
-      AnyCodable(beacon.major),
-      AnyCodable(beacon.minor)
+      AnyCodable(beacon.major.intValue),
+      AnyCodable(beacon.minor.intValue)
     ]
     
     self.distance = beacon.accuracy
