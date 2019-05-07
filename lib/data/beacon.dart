@@ -34,7 +34,7 @@ class BeaconIBeacon {
   final double accuracy;
   final int rssi;
   final BeaconProximity proximity;
-  final DateTime createdAt;
+  DateTime createdAt;
 }
 
 enum BeaconProximity {
