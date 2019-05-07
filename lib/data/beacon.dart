@@ -25,7 +25,8 @@ class BeaconIBeacon {
         accuracy = beacon.distance,
         rssi = beacon.rssi,
         proximity =
-            _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']);
+            _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']),
+        createdAt = DateTime.now();
 
   final String proximityUUID;
   final int major;
@@ -33,6 +34,7 @@ class BeaconIBeacon {
   final double accuracy;
   final int rssi;
   final BeaconProximity proximity;
+  final DateTime createdAt;
 }
 
 enum BeaconProximity {
