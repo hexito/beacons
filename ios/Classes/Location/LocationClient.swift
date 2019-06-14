@@ -5,10 +5,10 @@
 
 import Foundation
 import CoreLocation
+import SensoroBeaconKit
 
-class LocationClient : NSObject, CLLocationManagerDelegate {
+class LocationClient : NSObject,  SBKBeaconManagerDelegate{
   
-  private let locationManager = CLLocationManager()
   private var permissionCallbacks: Array<Callback<Void, Void>> = []
   private var requests: Array<ActiveRequest> = [];
   private var backgroundMonitoringListeners = [BackgroundMonitoringListener]()
@@ -16,11 +16,8 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
   
   override init() {
     super.init()
-    locationManager.delegate = self
-    locationManager.pausesLocationUpdatesAutomatically = false
-    if #available(iOS 9.0, *) {
-      locationManager.allowsBackgroundLocationUpdates = true
-    }
+    SBKBeaconManager.sharedInstance().delegate = self;
+    SBKBeaconManager.sharedInstance().requestAlwaysAuthorization();
   }
   
   
@@ -107,12 +104,14 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
   // Request internals
   
   private func start(request: ActiveRequest) {
+    //@TODO start ranging with sensoro SDK
     if !requests.contains(where: { $0.region.identifier == request.region.identifier && $0.kind == request.kind && $0.isRunning }) {
       switch request.kind {
       case .ranging:
-        locationManager.startRangingBeacons(in: request.frameworkRegion!)
+        let sbkBeaconId : SBKBeaconID = SBKBeaconID.init(from: request.frameworkRegion);
+        SBKBeaconManager.sharedInstance().startRangingBeacons(with: sbkBeaconId, wakeUpApplication: true);
       case .monitoring:
-        locationManager.startMonitoring(for: request.frameworkRegion!)
+        NSLog("@Monitoring feature is not developed");
       }
     }
     
@@ -125,9 +124,10 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
     if !requests.contains(where: { $0.region.identifier == request.region.identifier && $0.kind == request.kind && $0.isRunning }) {
       switch request.kind {
       case .ranging:
-        locationManager.stopRangingBeacons(in: request.frameworkRegion!)
+        let sbkBeaconId : SBKBeaconID = SBKBeaconID.init(from: request.frameworkRegion);
+        SBKBeaconManager.sharedInstance()?.stopRangingBeacons(with: sbkBeaconId);
       case .monitoring:
-        locationManager.stopMonitoring(for: request.frameworkRegion!)
+        NSLog("@Monitoring feature is not developed");
       }
     }
   }
@@ -161,7 +161,7 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
           failure: { _ in failure(Result.failure(of: .permissionDenied, for: region)) }
         )
         permissionCallbacks.append(callback)
-        locationManager.requestAuthorization(for: permission)
+        SBKBeaconManager.sharedInstance().requestAlwaysAuthorization();
       } else {
         failure(status.failure!)
       }
@@ -186,11 +186,7 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
     if let permission = request.permission {
       switch CLLocationManager.authorizationStatus() {
       case .notDetermined:
-        guard locationManager.isPermissionDeclared(for: permission) else {
           return ServiceStatus(isReady: false, needsAuthorization: nil, failure: Result.failure(of: .runtime, message: "Missing location usage description values in Info.plist. See readme for details.", fatal: true, for: region))
-        }
-        
-        return ServiceStatus(isReady: false, needsAuthorization: permission, failure: Result.failure(of: .permissionDenied, for: region))
       case .denied:
         return ServiceStatus(isReady: false, needsAuthorization: nil, failure: Result.failure(of: .permissionDenied, for: region))
       case .restricted:
@@ -206,84 +202,34 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
     
     return ServiceStatus(isReady: true, needsAuthorization: nil, failure: nil)
   }
-  
-  
-  // CLLocationManagerDelegate
-  
-  public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-    permissionCallbacks.forEach { action in
-      if status == .authorizedAlways || status == .authorizedWhenInUse {
-        action.success(())
-      } else {
-        action.failure(())
-      }
+
+    func beaconManager(_ beaconManager: SBKBeaconManager!, didChange status: CLAuthorizationStatus) {
+        permissionCallbacks.forEach { action in
+            if status == .authorizedAlways || status == .authorizedWhenInUse {
+                action.success(())
+            } else {
+                action.failure(())
+            }
+        }
+        permissionCallbacks.removeAll()
     }
-    permissionCallbacks.removeAll()
-  }
   
-  func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
-    requests
-      .filter { $0.kind == .ranging && $0.region.identifier == region.identifier }
-      .forEach {
-        $0.callback(Result.success(with: beacons.map { Beacon(from: $0) }, for: BeaconRegion(from: region)))
-      }
-  }
-  
-  func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
-    requests
-      .filter { $0.kind == .ranging && $0.region.identifier == region.identifier }
-      .forEach {
-        $0.callback(Result.failure(of: .runtime, message: error.localizedDescription, for: BeaconRegion(from: region)))
-      }
-  }
-  
-  func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-    guard region is CLBeaconRegion else { return }
-    print("didEnterRegion: \(region.identifier)")
-    
-    requests
-      .filter { $0.kind == .monitoring && $0.region.identifier == region.identifier }
-      .forEach {
-        $0.callback(Result.success(with: MonitoringState.enterOrInside, for: BeaconRegion(from: region as! CLBeaconRegion)))
-      }
-    
-    notify(for: BackgroundMonitoringEvent(type: "didEnterRegion", region: BeaconRegion(from: region as! CLBeaconRegion), state: MonitoringState.enterOrInside))
-  }
-  
-  func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-    print("didExitRegion: \(region.identifier)")
-    guard region is CLBeaconRegion else { return }
-    
-    requests
-      .filter { $0.kind == .monitoring && $0.region.identifier == region.identifier }
-      .forEach {
-        $0.callback(Result.success(with: MonitoringState.exitOrOutside, for: BeaconRegion(from: region as! CLBeaconRegion)))
-      }
-    
-    notify(for: BackgroundMonitoringEvent(type: "didExitRegion", region: BeaconRegion(from: region as! CLBeaconRegion), state: MonitoringState.exitOrOutside))
-  }
-  
-  func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-    guard region != nil && region is CLBeaconRegion else { return }
-    
-    requests
-      .filter { $0.kind == .monitoring && $0.region.identifier == region!.identifier }
-      .forEach {
-        $0.callback(Result.failure(of: .runtime, message: error.localizedDescription, for: BeaconRegion(from: region as! CLBeaconRegion)))
-      }
-  }
-  
-  func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-    guard region is CLBeaconRegion else { return }
-    let monitoringState = MonitoringState(from: state)
-    print("didDetermineState: \(monitoringState) forRegion: \(region.identifier)")
-    
-    notify(for: BackgroundMonitoringEvent(type: "didDetermineState", region: BeaconRegion(from: region as! CLBeaconRegion), state: monitoringState))
-  }
-  
-  func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-    print("didStartMonitoringForRegion: \(region.identifier)")
-  }
+    func beaconManager(_ beaconManager: SBKBeaconManager!, scanDidFinishWithBeacons beacons: [Any]!) {
+        if beacons.count > 0 {
+            requests
+                .filter { $0.kind == .ranging}
+                .forEach {
+                    let clBeaconRegion : CLBeaconRegion? = $0.frameworkRegion;
+                    var beaconsMapped: [Beacon] = [];
+                    
+                    beacons.forEach { beacon in
+                        beaconsMapped.append(Beacon(from: beacon))
+                    }
+                    
+                    $0.callback(Result.success(with: beaconsMapped, for: BeaconRegion(from: clBeaconRegion!)))
+            }
+        }
+    }
   
   struct Callback<T, E> {
     let success: (T) -> Void
@@ -302,7 +248,7 @@ class LocationClient : NSObject, CLLocationManagerDelegate {
       self.callback = callback
     }
   }
-  
+
   class ActiveRequest {
     let kind: Kind
     let region: BeaconRegion

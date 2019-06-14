@@ -4,13 +4,13 @@
 import 'package:beacons/beacons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_local_notifications/initialization_settings.dart';
-import 'package:flutter_local_notifications/notification_details.dart';
-import 'package:flutter_local_notifications/platform_specifics/android/initialization_settings_android.dart';
-import 'package:flutter_local_notifications/platform_specifics/android/notification_details_android.dart';
-import 'package:flutter_local_notifications/platform_specifics/ios/initialization_settings_ios.dart';
-import 'package:flutter_local_notifications/platform_specifics/ios/notification_details_ios.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/initialization_settings.dart';
+//import 'package:flutter_local_notifications/notification_details.dart';
+//import 'package:flutter_local_notifications/platform_specifics/android/initialization_settings_android.dart';
+//import 'package:flutter_local_notifications/platform_specifics/android/notification_details_android.dart';
+//import 'package:flutter_local_notifications/platform_specifics/ios/initialization_settings_ios.dart';
+//import 'package:flutter_local_notifications/platform_specifics/ios/notification_details_ios.dart';
 
 import 'tab_monitoring.dart';
 import 'tab_ranging.dart';
@@ -23,32 +23,32 @@ class MyApp extends StatefulWidget {
 
     int notifId = 0;
 
-    Beacons.backgroundMonitoringEvents().listen((event) {
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          new FlutterLocalNotificationsPlugin();
-      InitializationSettingsAndroid initializationSettingsAndroid =
-          new InitializationSettingsAndroid('app_icon');
-      InitializationSettingsIOS initializationSettingsIOS =
-          new InitializationSettingsIOS();
-      InitializationSettings initializationSettings =
-          new InitializationSettings(
-              initializationSettingsAndroid, initializationSettingsIOS);
-      flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-      NotificationDetailsAndroid androidPlatformChannelSpecifics =
-          new NotificationDetailsAndroid('your channel id', 'your channel name',
-              'your channel description');
-      NotificationDetailsIOS iOSPlatformChannelSpecifics =
-          new NotificationDetailsIOS();
-      NotificationDetails platformChannelSpecifics = new NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      flutterLocalNotificationsPlugin.show(
-        ++notifId,
-        event.type.toString(),
-        event.state.toString(),
-        platformChannelSpecifics,
-      );
-    });
+//    Beacons.backgroundMonitoringEvents().listen((event) {
+//      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//          new FlutterLocalNotificationsPlugin();
+//      InitializationSettingsAndroid initializationSettingsAndroid =
+//          new InitializationSettingsAndroid('app_icon');
+//      InitializationSettingsIOS initializationSettingsIOS =
+//          new InitializationSettingsIOS();
+//      InitializationSettings initializationSettings =
+//          new InitializationSettings(
+//              initializationSettingsAndroid, initializationSettingsIOS);
+//      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//
+//      NotificationDetailsAndroid androidPlatformChannelSpecifics =
+//          new NotificationDetailsAndroid('your channel id', 'your channel name',
+//              'your channel description');
+//      NotificationDetailsIOS iOSPlatformChannelSpecifics =
+//          new NotificationDetailsIOS();
+//      NotificationDetails platformChannelSpecifics = new NotificationDetails(
+//          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+//      flutterLocalNotificationsPlugin.show(
+//        ++notifId,
+//        event.type.toString(),
+//        event.state.toString(),
+//        platformChannelSpecifics,
+//      );
+//    });
 
     Beacons.configure(BeaconsSettings(
       android: BeaconsSettingsAndroid(
