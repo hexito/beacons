@@ -34,6 +34,7 @@ class BeaconsClient(private val permissionClient: PermissionClient) : BeaconCons
 
         fun init(application: Application, callback: BeaconsPlugin.BackgroundMonitoringCallback) {
             beaconManager = BeaconManager.getInstanceForApplication(application)
+            beaconManager!!.foregroundScanPeriod = 599L;
 
             // Add parsing support for iBeacon and Eddystone
             // https://beaconlayout.wordpress.com/
