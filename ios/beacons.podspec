@@ -15,6 +15,7 @@ Flutter beacons plugin for iOS and Android.
   s.dependency 'Flutter'
   s.dependency 'streams_channel'
   s.frameworks = 'CoreLocation'
+  s.vendored_frameworks = 'SensoroBeaconKit.framework'
   s.ios.deployment_target = '8.0'
 
 end

@@ -18,7 +18,7 @@ class Beacon {
   final double distance;
   final int rssi;
   final int txPower;
-  final int battery;
+  final double battery;
   final int temperature;
   final Map<String, dynamic> _platformCustoms;
 }
@@ -31,7 +31,7 @@ class BeaconIBeacon {
         accuracy = beacon.distance,
         rssi = beacon.rssi,
         txPower = beacon.txPower,
-        battery = beacon.battery != null ? beacon.battery : -999,
+        battery = beacon.battery != null ? beacon.battery : -1.0,
         temperature = beacon.temperature != null ? beacon.temperature : -999,
         proximity =
             _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']),
@@ -43,7 +43,7 @@ class BeaconIBeacon {
   final double accuracy;
   final int rssi;
   final int txPower;
-  final int battery;
+  final double battery;
   final int temperature;
   final BeaconProximity proximity;
   DateTime createdAt;
