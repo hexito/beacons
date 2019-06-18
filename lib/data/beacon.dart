@@ -35,6 +35,7 @@ class BeaconIBeacon {
         temperature = beacon.temperature != null ? beacon.temperature : -999,
         proximity =
             _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']),
+        powerLevel = beacon._platformCustoms['powerLevel'] != null ? beacon._platformCustoms['powerLevel'] : "0",
         createdAt = DateTime.now();
 
   final String proximityUUID;
@@ -46,6 +47,7 @@ class BeaconIBeacon {
   final double battery;
   final int temperature;
   final BeaconProximity proximity;
+  final String powerLevel;
   DateTime createdAt;
 }
 
