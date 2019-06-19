@@ -77,7 +77,7 @@ class _ListTabState extends State<ListTab> {
       body: new Column(
         children: <Widget>[
           new Header(
-            regionIdentifier: 'test',
+            regionIdentifier: 'osety',
             running: _running,
             onStart: _onStart,
             onStop: _onStop,

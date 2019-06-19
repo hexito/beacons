@@ -11,6 +11,7 @@ class Beacon {
     this.mRssi,
     this.battery,
     this.temperature,
+    this.powerLevel,
     this._platformCustoms,
   );
 
@@ -20,6 +21,7 @@ class Beacon {
   final int mRssi;
   final double battery;
   final int temperature;
+  final int powerLevel;
   final Map<String, dynamic> _platformCustoms;
 }
 
@@ -35,7 +37,7 @@ class BeaconIBeacon {
         temperature = beacon.temperature != null ? beacon.temperature : -999,
         proximity =
             _JsonCodec.proximityFromJson(beacon._platformCustoms['proximity']),
-        powerLevel = beacon._platformCustoms['powerLevel'] != null ? beacon._platformCustoms['powerLevel'] : 0,
+        powerLevel = beacon.powerLevel != null ? beacon.powerLevel : -1,
         createdAt = DateTime.now();
 
   final String proximityUUID;

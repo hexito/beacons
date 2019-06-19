@@ -23,7 +23,7 @@ class RangingTab extends ListTab {
         String battery = result.beacons.first.battery.toStringAsFixed(2);
         double batteryPercent = num.parse(battery) * 100;
         text = result.beacons.isNotEmpty
-            ? 'RSSI: ${result.beacons.first.rssi} battery: ${batteryPercent}%'
+            ? 'RSSI: ${result.beacons.first.rssi} battery: ${result.beacons.first.battery}%'
             : 'No beacon in range';
       } else {
         text = result.error.toString();

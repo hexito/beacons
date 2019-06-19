@@ -13,8 +13,9 @@ struct Beacon : Codable {
     let txPower: Int
     let battery: Double
     let temperature: Int
+    let powerLevel: Int
     let platformCustoms: [String:AnyCodable]
-    
+
     //  init(from beacon: CLBeacon) {
     //    self.ids = [
     //      AnyCodable(beacon.proximityUUID.uuidString),
@@ -31,7 +32,7 @@ struct Beacon : Codable {
     //      "proximity": AnyCodable(Proximity(from: beacon.proximity))
     //    ]
     //  }
-    
+
     init(from beacon: Any) {
         switch beacon {
         case let sbkBeacon as SBKBeacon:
@@ -40,15 +41,15 @@ struct Beacon : Codable {
                 AnyCodable(sbkBeacon.beaconID.major.intValue),
                 AnyCodable(sbkBeacon.beaconID.minor.intValue)
             ]
-            
+
             self.distance = sbkBeacon.accuracy
             self.rssi = sbkBeacon.rssi
             self.txPower = 0
             self.battery = sbkBeacon.batteryLevel.doubleValue
             self.temperature = sbkBeacon.temperature.intValue
+            self.powerLevel = sbkBeacon.broadcastTransmitPower.intValue
             self.platformCustoms = [
-                "proximity": AnyCodable(Proximity(from: sbkBeacon.proximity)),
-                "powerLevel": AnyCodable(sbkBeacon.broadcastTransmitPower)
+                "proximity": AnyCodable(Proximity(from: sbkBeacon.proximity))
             ]
         case let clBeacon as CLBeacon:
             self.ids = [
@@ -56,12 +57,13 @@ struct Beacon : Codable {
                 AnyCodable(clBeacon.major.intValue),
                 AnyCodable(clBeacon.minor.intValue)
             ]
-            
+
             self.distance = clBeacon.accuracy
             self.rssi = clBeacon.rssi
             self.txPower = 0
             self.battery = -1.0
             self.temperature = 0
+            self.powerLevel = -1
             self.platformCustoms = [
                 "proximity": AnyCodable(Proximity(from: clBeacon.proximity))
             ]
@@ -72,6 +74,7 @@ struct Beacon : Codable {
             self.txPower = 0
             self.battery = -1.0
             self.temperature = 0
+            self.powerLevel = -1
             self.platformCustoms = [
                 "proximity": "unknown"
             ]

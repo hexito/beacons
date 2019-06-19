@@ -9,9 +9,8 @@ class BeaconModel(
         val ids: List<Any>,
         val distance: Double,
         val rssi: Int,
-        val txPower: Int,
-        val advertismentByte: ByteArray,
-        val battery: Int,
+        val mRssi: Int,
+        val battery: Double,
         val temperature: Int,
         val platformCustoms: Map<String, String> = mapOf("proximity" to "unknown")
 ) {
@@ -21,10 +20,9 @@ class BeaconModel(
                         ?: emptyList(),
                 beacon.distance,
                 beacon.rssi,
-                beacon.txPower,
-                beacon.getmAdvertismentByte(),
+                beacon.measuredPower,
                 beacon.batteryLevel,
-                beacon.temperature ?: -999
+                beacon.temperature
         )
     }
 }
