@@ -117,7 +117,7 @@ class _JsonCodec {
       json['ids'],
       _Codec.parseJsonNumber(json['distance']),
       json['rssi'],
-      json['measuredPower'],
+      json['mRssi'],
       json['battery'],
       json['temperature'],
       json['powerLevel'],

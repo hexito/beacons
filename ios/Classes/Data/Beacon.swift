@@ -10,7 +10,7 @@ struct Beacon : Codable {
     let ids: [AnyCodable]
     let distance: Double
     let rssi: Int
-    let txPower: Int
+    let mRssi: Int
     let battery: Double
     let temperature: Int
     let powerLevel: Int
@@ -44,7 +44,7 @@ struct Beacon : Codable {
 
             self.distance = sbkBeacon.accuracy
             self.rssi = sbkBeacon.rssi
-            self.txPower = 0
+            self.mRssi = 0
             self.battery = sbkBeacon.batteryLevel.doubleValue
             self.temperature = sbkBeacon.temperature.intValue
             self.powerLevel = sbkBeacon.broadcastTransmitPower.intValue
@@ -60,7 +60,7 @@ struct Beacon : Codable {
 
             self.distance = clBeacon.accuracy
             self.rssi = clBeacon.rssi
-            self.txPower = 0
+            self.mRssi = 0
             self.battery = -1.0
             self.temperature = 0
             self.powerLevel = -1
@@ -71,7 +71,7 @@ struct Beacon : Codable {
             self.ids = [];
             self.distance = 0
             self.rssi = 0
-            self.txPower = 0
+            self.mRssi = 0
             self.battery = -1.0
             self.temperature = 0
             self.powerLevel = -1
