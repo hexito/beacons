@@ -12,6 +12,7 @@ class BeaconModel(
         val mRssi: Int,
         val battery: Double,
         val temperature: Int,
+        val powerLevel: Int,
         val platformCustoms: Map<String, String> = mapOf("proximity" to "unknown")
 ) {
     companion object {
@@ -22,7 +23,8 @@ class BeaconModel(
                 beacon.rssi,
                 beacon.measuredPower,
                 beacon.batteryLevel,
-                beacon.temperature
+                beacon.temperature,
+                beacon.powerLevel
         )
     }
 }
